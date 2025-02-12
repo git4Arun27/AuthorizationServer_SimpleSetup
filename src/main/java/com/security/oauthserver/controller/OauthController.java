@@ -2,7 +2,6 @@ package com.security.oauthserver.controller;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -12,26 +11,10 @@ import java.util.Map;
 @RequestMapping("/api")
 public class OauthController {
 
-    @GetMapping("/msg")
-    public ResponseEntity<String> getEmployee(){
-        return ResponseEntity.ok("Hey this is from oauth");
-    }
-
     @GetMapping("/details")
     public String getDetails(Principal principal)
     {
         return principal.getName();
-    }
-
-    @GetMapping("/user/dashboard")
-    public String userDashboard() {
-        return "Welcome to User Dashboard!";
-    }
-
-
-    @GetMapping("/admin/dashboard")
-    public String adminDashboard() {
-        return "Welcome to Admin Dashboard!";
     }
 
     @GetMapping("/oauth2/code/internal-client")
