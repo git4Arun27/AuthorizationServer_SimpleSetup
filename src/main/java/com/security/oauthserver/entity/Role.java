@@ -6,6 +6,9 @@ import java.util.List;
 @Entity
 public class Role {
 
+    public Role() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer roleId;
@@ -16,7 +19,7 @@ public class Role {
 
     @ManyToMany
     @JoinTable(
-            name="roles_previliges",
+            name="roles_privileges",
             joinColumns=@JoinColumn(name="roleId"),
             inverseJoinColumns = @JoinColumn(name="priviligeId")
 

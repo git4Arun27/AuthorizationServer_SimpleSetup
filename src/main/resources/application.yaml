@@ -4,3 +4,12 @@ server:
 spring:
   application:
     name: OAuthServer
+  datasource:
+    url: jdbc:mysql://localhost:3306/oauthserver?createDatabaseIfNotExist=true
+    username: root
+    password: Arun@2002
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true

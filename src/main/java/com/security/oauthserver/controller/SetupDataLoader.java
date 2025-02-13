@@ -10,12 +10,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+@Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup=false;
@@ -30,7 +32,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private PrivilegeRepository privilegeRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -51,7 +53,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         userRole.setPriviliges(Arrays.asList(readPrivilege));
 
 
-        User user=new User("arun","prakash","123",true);
+        User user=new User("arun","prakash","arun.com",passwordEncoder.encode("123"),true);
         user.setTokenExpired(false);
         user.setRoles(Arrays.asList(adminRole,userRole));
         userRepository.save(user);

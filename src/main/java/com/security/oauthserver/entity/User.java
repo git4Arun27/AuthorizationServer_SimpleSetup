@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 public class User {
 
+    public User() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
@@ -25,10 +28,10 @@ public class User {
     )
     private List<Role>roles;
 
-
-    public User(String firstName, String lastName, String password, Boolean enabled) {
+    public User(String firstName, String lastName, String emailId, String password, Boolean enabled) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.emailId = emailId;
         this.password = password;
         this.enabled = enabled;
     }

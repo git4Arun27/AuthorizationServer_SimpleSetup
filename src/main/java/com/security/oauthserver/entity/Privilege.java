@@ -7,24 +7,26 @@ import java.util.List;
 @Entity
 public class Privilege {
 
+    public Privilege() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer entityId;
+    private Integer privilegeId;
     private String name;
 
-    @ManyToMany(mappedBy = "priviliges")
+    @ManyToMany(mappedBy = "privileges")
     private List<Role>roles;
 
     public Privilege(String name) {
         this.name = name;
     }
 
-    public Integer getEntityId() {
-        return entityId;
+    public Integer getPrivilegeId() {
+        return privilegeId;
     }
 
-    public void setEntityId(Integer entityId) {
-        this.entityId = entityId;
+    public void setPrivilegeId(Integer privilegeId) {
+        this.privilegeId = privilegeId;
     }
 
     public String getName() {
