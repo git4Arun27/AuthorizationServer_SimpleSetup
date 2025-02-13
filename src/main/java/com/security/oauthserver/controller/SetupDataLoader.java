@@ -40,11 +40,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         if(alreadySetup) return;
 
-        Privilege readPrivilege=createPriviligeIfNotExists("READ_PRIVILEGE");
-        Privilege writePrivilege=createPriviligeIfNotExists("WRITE_PRIVILEGE");
+        Privilege readPrivilege=createPriviligeIfNotExists("READ");
+        Privilege writePrivilege=createPriviligeIfNotExists("WRITE");
 
-        Role adminRole=createRoleIfNotExists("ROLE_ADMIN");
-        Role userRole=createRoleIfNotExists("ROLE_USER");
+        Role adminRole=createRoleIfNotExists("ADMIN");
+        Role userRole=createRoleIfNotExists("USER");
 
         List<Privilege>adminPrivilege= Arrays.asList(readPrivilege,writePrivilege);
 

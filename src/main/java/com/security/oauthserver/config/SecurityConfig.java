@@ -1,5 +1,9 @@
 package com.security.oauthserver.config;
 
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import com.security.oauthserver.service.MyUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,12 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Set;
@@ -113,15 +123,22 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(){
+        String[] claimsToBeRemoved={"nbf","scope","iss","iat","jti"};
         return context -> {
             if(OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())){
                 context.getClaims().claims(
                         claims->{
                             Set<String>roles= AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
                                     .stream()
-                                    .map(c->c.replaceFirst("^ROLE",""))
+                                    .filter(authorities->authorities.startsWith("ROLE_"))
                                     .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
                             claims.put("roles",roles);
+                            Set<String>privileges=AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
+                                    .stream()
+                                    .filter(authority->!authority.startsWith("ROLE_"))
+                                    .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+                            claims.put("privileges",privileges);
+                            for(String s:claimsToBeRemoved) claims.remove(s);
                         }
                 );
             }
@@ -130,7 +147,6 @@ public class SecurityConfig {
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        logger.warn("AuthorizationServerSettings Invoked");
         return AuthorizationServerSettings.builder()
                 .issuer("http://localhost:9000")
                 .build();
